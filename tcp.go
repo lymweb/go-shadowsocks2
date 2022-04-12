@@ -14,6 +14,12 @@ import (
 )
 
 // Create a SOCKS server listening on addr and proxy to server.
+func SocksLocal(addr, server string, shadow func(net.Conn) net.Conn) {
+	logf("SOCKS proxy %s <-> %s", addr, server)
+	tcpLocal(addr, server, shadow, func(c net.Conn) (socks.Addr, error) { return socks.Handshake(c) })
+}
+
+// Create a SOCKS server listening on addr and proxy to server.
 func socksLocal(addr, server string, shadow func(net.Conn) net.Conn) {
 	logf("SOCKS proxy %s <-> %s", addr, server)
 	tcpLocal(addr, server, shadow, func(c net.Conn) (socks.Addr, error) { return socks.Handshake(c) })
